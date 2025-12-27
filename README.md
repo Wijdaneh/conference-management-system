@@ -3,16 +3,16 @@
 A complete microservices-based conference management system built with **Spring Boot** and **Angular**.
 
 ## 📸 Screenshots
-![Frontend Dashboard](docs/images/frontend-dashboard-screenshot.jpg)
+![Frontend Dashboard](docs/images/frontend-dashboard-screenshot.JPG)
 *Angular Financial Dashboard*
 
-![API Documentation](docs/images/keynote-api-screenshot.jpg)
+![API Documentation](docs/images/keynote-api-screenshot.JPG)
 *Swagger UI for Keynote API*
 
-![Service Discovery](docs/images/eureka-dashboard-screenshot.jpg)
+![Service Discovery](docs/images/eureka-dashboard-screenshot.JPG)
 *Eureka Dashboard - All Services*
 
-![Database Console](docs/images/h2-console-screenshot.jpg)
+![Database Console](docs/images/h2-console-screenshot.JPG)
 *H2 Database Console*
 
 ## 🚀 Quick Start
@@ -158,3 +158,5 @@ MIT License
 
 ## ⭐ Support
 Give a ⭐️ on [GitHub](https://github.com/Wijdaneh/conference-management-system) if you find this project useful!
+
+
