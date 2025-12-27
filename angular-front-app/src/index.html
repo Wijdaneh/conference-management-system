@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference Management System - Financial Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        :root {
+            --angular-red: #dd0031;
+            --angular-dark: #1976d2;
+            --primary-blue: #2a3eb1;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --text-color: #444;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-gray);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo-icon {
+            color: var(--angular-red);
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo-subtext {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
+        .nav-menu {
+            list-style: none;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--angular-red);
+        }
+        
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .header h1 {
+            color: var(--primary-blue);
+            font-size: 28px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--angular-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+        
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .revenue-icon {
+            background-color: var(--angular-red);
+        }
+        
+        .attendees-icon {
+            background-color: var(--angular-dark);
+        }
+        
+        .events-icon {
+            background-color: var(--success);
+        }
+        
+        .expenses-icon {
+            background-color: var(--warning);
+        }
+        
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .card-change {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .positive {
+            color: var(--success);
+        }
+        
+        .negative {
+            color: var(--danger);
+        }
+        
+        /* Charts and Tables */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container, .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--angular-red);
+        }
+        
+        .chart-placeholder {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #888;
+            font-weight: 500;
+        }
+        
+        .recent-transactions {
+            margin-top: 10px;
+        }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-name {
+            font-weight: 500;
+        }
+        
+        .transaction-date {
+            font-size: 13px;
+            color: #888;
+        }
+        
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+            border-top: 1px solid var(--medium-gray);
+            margin-top: 20px;
+        }
+        
+        .angular-badge {
+            color: var(--angular-red);
+            font-weight: 700;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .logo-text, .logo-subtext, .nav-text {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-icon {
+                margin-right: 0;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-calendar-alt logo-icon"></i>
+            <div>
+                <div class="logo-text">CMS</div>
+                <div class="logo-subtext">Conference System</div>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item active">
+                <i class="fas fa-tachometer-alt nav-icon"></i>
+                <span class="nav-text">Dashboard</span>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-dollar-sign nav-icon"></i>
+                <span class="nav-text">Financials</span>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-users nav-icon"></i>
+                <span class="nav-text">Attendees</span>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-calendar-check nav-icon"></i>
+                <span class="nav-text">Events</span>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-chart-pie nav-icon"></i>
+                <span class="nav-text">Reports</span>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-cog nav-icon"></i>
+                <span class="nav-text">Settings</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Conference Financial Dashboard</h1>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <div class="user-avatar">AJ</div>
+                    <div>
+                        <div style="font-weight: 500;">Admin User</div>
+                        <div style="font-size: 12px; color: #777;">Conference Manager</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Total Revenue</div>
+                    <div class="card-icon revenue-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+                <div class="card-value">$124,580</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 12.5% from last quarter
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Registered Attendees</div>
+                    <div class="card-icon attendees-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="card-value">2,847</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 8.2% from last month
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Active Events</div>
+                    <div class="card-icon events-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div class="card-value">14</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 2 new events
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Total Expenses</div>
+                    <div class="card-icon expenses-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                </div>
+                <div class="card-value">$68,430</div>
+                <div class="card-change negative">
+                    <i class="fas fa-arrow-down"></i> 3.1% over budget
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts and Tables -->
+        <div class="dashboard-content">
+            <div class="chart-container">
+                <div class="section-title">
+                    <i class="fas fa-chart-line"></i> Revenue Trends
+                </div>
+                <div class="chart-placeholder">
+                    Angular Chart Component: Revenue by Month (Line Chart)
+                </div>
+                <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 14px; color: #888;">Current Quarter</div>
+                        <div style="font-size: 24px; font-weight: 700; color: var(--success);">$42,150</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: #888;">Previous Quarter</div>
+                        <div style="font-size: 24px; font-weight: 700;">$37,450</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: #888;">Projection</div>
+                        <div style="font-size: 24px; font-weight: 700; color: var(--primary-blue);">$48,920</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <div class="section-title">
+                    <i class="fas fa-exchange-alt"></i> Recent Transactions
+                </div>
+                <div class="recent-transactions">
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background-color: var(--success);">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-name">Attendee Registration</div>
+                            <div class="transaction-date">Today, 10:24 AM</div>
+                        </div>
+                        <div class="transaction-amount" style="color: var(--success);">+$499</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background-color: var(--angular-red);">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-name">Catering Services</div>
+                            <div class="transaction-date">Yesterday, 2:15 PM</div>
+                        </div>
+                        <div class="transaction-amount" style="color: var(--danger);">-$2,850</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background-color: var(--angular-dark);">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-name">AV Equipment Rental</div>
+                            <div class="transaction-date">Mar 12, 9:45 AM</div>
+                        </div>
+                        <div class="transaction-amount" style="color: var(--danger);">-$1,250</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background-color: var(--warning);">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-name">Sponsorship Payment</div>
+                            <div class="transaction-date">Mar 11, 4:30 PM</div>
+                        </div>
+                        <div class="transaction-amount" style="color: var(--success);">+$5,000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Conference Management System | Financial Angular Application © 2025</p>
+            <p>Built with <span class="angular-badge">Angular</span> • Data updates in real-time</p>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactivity to navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Update header title based on selection
+                const navText = this.querySelector('.nav-text').textContent;
+                const header = document.querySelector('.header h1');
+                
+                if (navText === 'Dashboard') {
+                    header.textContent = 'Conference Financial Dashboard';
+                } else if (navText === 'Financials') {
+                    header.textContent = 'Financial Reports & Analytics';
+                } else if (navText === 'Attendees') {
+                    header.textContent = 'Attendee Management';
+                } else if (navText === 'Events') {
+                    header.textContent = 'Event Management';
+                } else if (navText === 'Reports') {
+                    header.textContent = 'Analytics & Reporting';
+                } else if (navText === 'Settings') {
+                    header.textContent = 'System Settings';
+                }
+            });
+        });
+        
+        // Simulate live data updates
+        function updateLiveData() {
+            const revenueElement = document.querySelector('.card:nth-child(1) .card-value');
+            const attendeesElement = document.querySelector('.card:nth-child(2) .card-value');
+            
+            // Generate random small fluctuations for demo purposes
+            const currentRevenue = parseInt(revenueElement.textContent.replace('$', '').replace(',', ''));
+            const currentAttendees = parseInt(attendeesElement.textContent.replace(',', ''));
+            
+            const revenueChange = Math.floor(Math.random() * 100) - 50;
+            const attendeesChange = Math.floor(Math.random() * 10) - 5;
+            
+            const newRevenue = currentRevenue + revenueChange;
+            const newAttendees = currentAttendees + attendeesChange;
+            
+            revenueElement.textContent = '$' + newRevenue.toLocaleString();
+            attendeesElement.textContent = newAttendees.toLocaleString();
+            
+            // Update change indicators
+            const revenueChangeElement = document.querySelector('.card:nth-child(1) .card-change');
+            const attendeesChangeElement = document.querySelector('.card:nth-child(2) .card-change');
+            
+            revenueChangeElement.innerHTML = revenueChange >= 0 
+                ? `<i class="fas fa-arrow-up"></i> ${(revenueChange/currentRevenue*100).toFixed(1)}% from last update`
+                : `<i class="fas fa-arrow-down"></i> ${Math.abs(revenueChange/currentRevenue*100).toFixed(1)}% from last update`;
+            
+            attendeesChangeElement.innerHTML = attendeesChange >= 0 
+                ? `<i class="fas fa-arrow-up"></i> ${attendeesChange} from last update`
+                : `<i class="fas fa-arrow-down"></i> ${Math.abs(attendeesChange)} from last update`;
+        }
+        
+        // Update data every 10 seconds for demo
+        setInterval(updateLiveData, 10000);
+    </script>
+</body>
+</html>

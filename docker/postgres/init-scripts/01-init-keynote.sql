@@ -1,0 +1,10 @@
+CREATE DATABASE keynote_db;
+CREATE USER keynote_user WITH ENCRYPTED PASSWORD 'keynote_pass';
+GRANT ALL PRIVILEGES ON DATABASE keynote_db TO keynote_user;
+
+\c keynote_db;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO keynote_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO keynote_user;

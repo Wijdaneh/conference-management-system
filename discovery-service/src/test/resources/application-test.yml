@@ -1,0 +1,49 @@
+# Configuration TEST pour désactiver Spring Cloud Discovery
+spring:
+  main:
+    web-application-type: none
+    allow-bean-definition-overriding: true
+    lazy-initialization: true
+  
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+    loadbalancer:
+      enabled: false
+  
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration
+      - org.springframework.cloud.netflix.eureka.server.EurekaServerAutoConfiguration
+      - org.springframework.cloud.netflix.eureka.EurekaDiscoveryClientConfiguration
+      - org.springframework.cloud.client.discovery.EnableDiscoveryClient
+      - org.springframework.boot.actuate.autoconfigure.metrics.MetricsAutoConfiguration
+
+# Désactiver Eureka complètement
+eureka:
+  client:
+    enabled: false
+    fetch-registry: false
+    register-with-eureka: false
+  server:
+    enabled: false
+
+# Désactiver les fonctionnalités non nécessaires
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  health:
+    defaults:
+      enabled: true
+
+# Configuration logging pour tests
+logging:
+  level:
+    root: WARN
+    com.conference.discovery: INFO
+    org.springframework: ERROR
+    com.netflix: OFF

@@ -1,0 +1,14 @@
+"serve": {
+  "builder": "@angular-devkit/build-angular:dev-server",
+  "configurations": {
+    "production": {
+      "browserTarget": "angular-front-app:build:production"
+    },
+    "development": {
+      "browserTarget": "angular-front-app:build:development",
+      "port": 4200,
+      "proxyConfig": "proxy.conf.json"
+    }
+  },
+  "defaultConfiguration": "development"
+}

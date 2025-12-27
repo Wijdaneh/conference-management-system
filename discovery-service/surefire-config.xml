@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<surefire xmlns="http://maven.apache.org/surefire/maven-surefire-plugin">
+    <excludes>
+        <exclude>**/DiscoveryServiceSimpleTest.java</exclude>
+        <exclude>**/DiscoverySimpleTest.java</exclude>
+    </excludes>
+    <includes>
+        <include>**/DiscoveryUnitTest.java</include>
+        <include>**/DiscoveryUnitTests.java</include>
+        <include>**/DiscoveryServiceApplicationTests.java</include>
+    </includes>
+</surefire>
